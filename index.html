@@ -164,32 +164,7 @@
             color: #ffd966;
             border: 1px solid #6a8fa0;
         }
-        .field-group {
-            margin-bottom: 24px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-            color: #b6d0db;
-            letter-spacing: 0.3px;
-        }
-        input {
-            width: 100%;
-            background: #0f1e26;
-            border: 2px solid #2b414e;
-            border-radius: 50px;
-            padding: 16px 24px;
-            font-size: 1.1rem;
-            color: white;
-            outline: none;
-            transition: 0.2s;
-        }
-        input:focus {
-            border-color: #ffaa33;
-            background: #0f1f2b;
-        }
-        .submit-btn {
+        .next-btn {
             background: linear-gradient(135deg, #ff9f2f, #ff6a3a);
             border: none;
             border-radius: 60px;
@@ -204,19 +179,10 @@
             margin-top: 16px;
             border: 1px solid #ffcf9a;
         }
-        .submit-btn:hover {
+        .next-btn:hover {
             background: linear-gradient(135deg, #ffb347, #ff7f4f);
             transform: scale(1.01);
             box-shadow: 0 12px 22px -3px #ff964f;
-        }
-        .status-msg {
-            background: #0c1c24;
-            border-radius: 60px;
-            padding: 14px 28px;
-            text-align: center;
-            color: #a9d6e5;
-            border: 1px solid #3f6f7a;
-            margin-top: 20px;
         }
         .hidden {
             display: none !important;
@@ -243,20 +209,7 @@
         </h2>
         <div class="package-grid" id="robuxPackages">
         </div>
-        <div class="field-group">
-            <label>📛 Nama lengkap</label>
-            <input type="text" id="robuxName" placeholder="contoh: Vincent Anthony Kan">
-        </div>
-        <div class="field-group">
-            <label>📚 Kelas (contoh: 5a, 6c)</label>
-            <input type="text" id="robuxClass" placeholder="misal: 5a">
-        </div>
-        <div class="field-group">
-            <label>📞 Nomor WhatsApp (aktif)</label>
-            <input type="tel" id="robuxPhone" placeholder="08123456789">
-        </div>
-        <button class="submit-btn" id="submitRobux">✅Order Robux</button>
-        <div id="robuxStatus" class="status-msg hidden"></div>
+        <button class="next-btn" id="nextRobux">➡️ Lanjut ke Info</button>
     </div>
 
     <div id="mlForm" class="hidden">
@@ -264,44 +217,30 @@
         <h2>💎 Mobile Legends — Diamond</h2>
         <div class="package-grid" id="mlPackages">
         </div>
-        <div class="field-group">
-            <label>📛 Nama lengkap</label>
-            <input type="text" id="mlName" placeholder="contoh: Vincent Anthony Kan">
-        </div>
-        <div class="field-group">
-            <label>📚 Kelas (contoh: 5a, 6c)</label>
-            <input type="text" id="mlClass" placeholder="misal: 8b">
-        </div>
-        <div class="field-group">
-            <label>📞 Nomor WhatsApp (aktif)</label>
-            <input type="tel" id="mlPhone" placeholder="08123456789">
-        </div>
-        <button class="submit-btn" id="submitMl">✅Order Diamond</button>
-        <div id="mlStatus" class="status-msg hidden"></div>
+        <button class="next-btn" id="nextMl">➡️ Lanjut ke Info</button>
     </div>
-
 </div>
 
 <script>
     (function() {
         const robuxPackages = [
-            { label: "160 Robux", price: "Rp 37.000", rawPrice: 37000 },
-            { label: "240 Robux", price: "Rp 50.000", rawPrice: 50000 },
-            { label: "320 Robux", price: "Rp 65.000", rawPrice: 65000 },
-            { label: "400 Robux + bonus 100", price: "Rp 80.000", rawPrice: 80000 },
-            { label: "800 Robux + bonus 200", price: "Rp 160.000", rawPrice: 160000 },
-            { label: "1.200 Robux + bonus 300", price: "Rp 250.000", rawPrice: 250000 },
-            { label: "1.700 Robux + bonus 500", price: "Rp 320.000", rawPrice: 320000 },
-            { label: "3.000 Robux", price: "Rp 470.000", rawPrice: 470000 },
-            { label: "4.000 Robux", price: "Rp 630.000", rawPrice: 630000 }
+            { label: "160 Robux", price: "Rp 37.000" },
+            { label: "240 Robux", price: "Rp 50.000" },
+            { label: "320 Robux", price: "Rp 65.000" },
+            { label: "400 Robux + bonus 100", price: "Rp 80.000" },
+            { label: "800 Robux + bonus 200", price: "Rp 160.000" },
+            { label: "1.200 Robux + bonus 300", price: "Rp 250.000" },
+            { label: "1.700 Robux + bonus 500", price: "Rp 320.000" },
+            { label: "3.000 Robux", price: "Rp 470.000" },
+            { label: "4.000 Robux", price: "Rp 630.000" }
         ];
 
         const mlPackages = [
-            { label: "50 Diamonds", price: "Rp 16.000", rawPrice: 16000 },
-            { label: "70 Diamonds", price: "Rp 25.000", rawPrice: 25000 },
-            { label: "110 Diamonds", price: "Rp 35.000", rawPrice: 35000 },
-            { label: "512 Diamonds", price: "Rp 150.000", rawPrice: 150000 },
-            { label: "750 Diamonds", price: "Rp 220.000", rawPrice: 220000 }
+            { label: "50 Diamonds", price: "Rp 16.000" },
+            { label: "70 Diamonds", price: "Rp 25.000" },
+            { label: "110 Diamonds", price: "Rp 35.000" },
+            { label: "512 Diamonds", price: "Rp 150.000" },
+            { label: "750 Diamonds", price: "Rp 220.000" }
         ];
 
         const categoryDiv = document.getElementById('categorySelector');
@@ -311,23 +250,11 @@
         const chooseMl = document.getElementById('chooseMl');
         const backRobux = document.getElementById('backFromRobux');
         const backMl = document.getElementById('backFromMl');
+        const nextRobux = document.getElementById('nextRobux');
+        const nextMl = document.getElementById('nextMl');
 
         const robuxContainer = document.getElementById('robuxPackages');
         const mlContainer = document.getElementById('mlPackages');
-
-        const robuxName = document.getElementById('robuxName');
-        const robuxClass = document.getElementById('robuxClass');
-        const robuxPhone = document.getElementById('robuxPhone');
-        const mlName = document.getElementById('mlName');
-        const mlClass = document.getElementById('mlClass');
-        const mlPhone = document.getElementById('mlPhone');
-
-        const submitRobux = document.getElementById('submitRobux');
-        const submitMl = document.getElementById('submitMl');
-        const robuxStatus = document.getElementById('robuxStatus');
-        const mlStatus = document.getElementById('mlStatus');
-
-        const WEBHOOK_URL = "https://discord.com/api/webhooks/1474595768404017266/ojyfzuWLQHP_91kfvUf9Ix09tlKLd5acyidSuG7kbfR0HDCMfjlJo7lbcfCUAj3IVvO5";
 
         function renderPackages(container, packages, nameAttr) {
             container.innerHTML = ''; 
@@ -372,128 +299,33 @@
         backRobux.addEventListener('click', () => {
             robuxForm.classList.add('hidden');
             categoryDiv.classList.remove('hidden');
-            robuxStatus.classList.add('hidden');
-            robuxStatus.textContent = '';
         });
 
         backMl.addEventListener('click', () => {
             mlForm.classList.add('hidden');
             categoryDiv.classList.remove('hidden');
-            mlStatus.classList.add('hidden');
-            mlStatus.textContent = '';
         });
 
-        async function sendToDiscord(category, packageInfo, name, cls, phone) {
-            const displayPackage = packageInfo.replace('||', ' · ');
-            const message = {
-                content: `**🆕 PRE-ORDER BARU**`,
-                embeds: [{
-                    title: `📦 ${category}`,
-                    color: category === 'Robux' ? 0xff9f2f : 0x9b59b6,
-                    fields: [
-                        { name: 'Paket', value: displayPackage, inline: true },
-                        { name: 'Nama', value: name, inline: true },
-                        { name: 'Kelas', value: cls, inline: true },
-                        { name: 'No. HP', value: phone, inline: false }
-                    ],
-                    footer: { text: 'Top Up Sat Zet' },
-                    timestamp: new Date().toISOString()
-                }]
-            };
-
-            try {
-                const response = await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(message)
-                });
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                return true;
-            } catch (e) {
-                console.error(e);
-                return false;
+        function savePackageAndRedirect(category) {
+            const radioName = category === 'Robux' ? 'robuxPackage' : 'mlPackage';
+            const selected = document.querySelector(`input[name="${radioName}"]:checked`);
+            if (!selected) {
+                alert('Pilih paket terlebih dahulu.');
+                return;
             }
+            const packageValue = selected.value;
+            const [label, price] = packageValue.split('||');
+            const orderData = {
+                category: category,
+                package: label,
+                price: price
+            };
+            localStorage.setItem('selectedPackage', JSON.stringify(orderData));
+            window.location.href = 'info.html';
         }
 
-        submitRobux.addEventListener('click', async () => {
-            const selectedRadio = document.querySelector('input[name="robuxPackage"]:checked');
-            if (!selectedRadio) {
-                robuxStatus.textContent = '❌ Pilih paket Robux terlebih dahulu.';
-                robuxStatus.classList.remove('hidden');
-                return;
-            }
-            const packageValue = selectedRadio.value;
-            const name = robuxName.value.trim();
-            const cls = robuxClass.value.trim();
-            const phone = robuxPhone.value.trim();
-
-            if (!name || !cls || !phone) {
-                robuxStatus.textContent = '❌ Nama, kelas, dan nomor HP harus diisi.';
-                robuxStatus.classList.remove('hidden');
-                return;
-            }
-
-            robuxStatus.textContent = '⏳ Mengirim pesanan...';
-            robuxStatus.classList.remove('hidden');
-
-            const success = await sendToDiscord('Robux', packageValue, name, cls, phone);
-
-            if (success) {
-                robuxStatus.textContent = '✅ Pesanan Robux terkirim! ';
-                robuxName.value = '';
-                robuxClass.value = '';
-                robuxPhone.value = '';
-            } else {
-                robuxStatus.textContent = '❌ Gagal mengirim. Coba lagi nanti.';
-            }
-        });
-
-        submitMl.addEventListener('click', async () => {
-            const selectedRadio = document.querySelector('input[name="mlPackage"]:checked');
-            if (!selectedRadio) {
-                mlStatus.textContent = '❌ Pilih paket Diamond terlebih dahulu.';
-                mlStatus.classList.remove('hidden');
-                return;
-            }
-            const packageValue = selectedRadio.value;
-            const name = mlName.value.trim();
-            const cls = mlClass.value.trim();
-            const phone = mlPhone.value.trim();
-
-            if (!name || !cls || !phone) {
-                mlStatus.textContent = '❌ Nama, kelas, dan nomor HP harus diisi.';
-                mlStatus.classList.remove('hidden');
-                return;
-            }
-
-            mlStatus.textContent = '⏳ Mengirim pesanan...';
-            mlStatus.classList.remove('hidden');
-
-            const success = await sendToDiscord('ML Diamond', packageValue, name, cls, phone);
-
-            if (success) {
-                mlStatus.textContent = '✅ Pesanan ML terkirim! ';
-                mlName.value = '';
-                mlClass.value = '';
-                mlPhone.value = '';
-            } else {
-                mlStatus.textContent = '❌ Gagal mengirim. Coba lagi nanti.';
-            }
-        });
-
-        [robuxName, robuxClass, robuxPhone].forEach(input => {
-            input.addEventListener('focus', () => robuxStatus.classList.add('hidden'));
-        });
-        [mlName, mlClass, mlPhone].forEach(input => {
-            input.addEventListener('focus', () => mlStatus.classList.add('hidden'));
-        });
-
-        document.querySelectorAll('input[name="robuxPackage"]').forEach(r => {
-            r.addEventListener('change', () => robuxStatus.classList.add('hidden'));
-        });
-        document.querySelectorAll('input[name="mlPackage"]').forEach(r => {
-            r.addEventListener('change', () => mlStatus.classList.add('hidden'));
-        });
+        nextRobux.addEventListener('click', () => savePackageAndRedirect('Robux'));
+        nextMl.addEventListener('click', () => savePackageAndRedirect('ML Diamond'));
     })();
 </script>
 </body>
