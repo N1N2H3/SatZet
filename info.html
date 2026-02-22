@@ -171,10 +171,6 @@
             <input type="email" id="mlEmail" placeholder="email@contoh.com">
         </div>
         <div class="field-group">
-            <label>🔑 Password ML</label>
-            <input type="password" id="mlPassword" placeholder="password">
-        </div>
-        <div class="field-group">
             <label>🌏 Server Zone</label>
             <select id="mlServer">
                 <option value="Asia">Asia</option>
@@ -202,7 +198,6 @@
         const mlFields = document.getElementById('mlFields');
         const robuxEmail = document.getElementById('robuxEmail');
         const mlEmail = document.getElementById('mlEmail');
-        const mlPassword = document.getElementById('mlPassword');
         const mlServer = document.getElementById('mlServer');
         const submitBtn = document.getElementById('submitOrder');
         const statusMsg = document.getElementById('statusMsg');
@@ -234,7 +229,7 @@
             }
         }
 
-        async function sendToDiscord(category, pkg, price, name, cls, phone, accountField1, accountField2 = null, serverZone = null) {
+        async function sendToDiscord(category, pkg, price, name, cls, phone, accountField1, serverZone = null) {
             let fields = [
                 { name: 'Paket', value: `${pkg} · ${price}`, inline: true },
                 { name: 'Nama', value: name, inline: true },
@@ -249,7 +244,6 @@
             } else if (category === 'ML Diamond') {
                 fields.push(
                     { name: 'Email ML', value: accountField1, inline: true },
-                    { name: 'Password ML', value: accountField2, inline: true },
                     { name: 'Server Zone', value: serverZone, inline: true }
                 );
             }
@@ -298,10 +292,9 @@
 
             if (selectedData.category === 'ML Diamond') {
                 const email = mlEmail.value.trim();
-                const password = mlPassword.value.trim();
                 const server = mlServer.value;
-                if (!email || !password) {
-                    statusMsg.textContent = '❌ Email dan password ML harus diisi.';
+                if (!email) {
+                    statusMsg.textContent = '❌ Email ML harus diisi.';
                     statusMsg.classList.remove('hidden');
                     return;
                 }
@@ -317,7 +310,6 @@
                     cls,
                     phone,
                     email,
-                    password,
                     server
                 );
 
@@ -327,7 +319,6 @@
                     className.value = '';
                     phoneNumber.value = '';
                     mlEmail.value = '';
-                    mlPassword.value = '';
                 } else {
                     statusMsg.textContent = '❌ Gagal mengirim. Coba lagi.';
                 }
@@ -368,7 +359,7 @@
             }
         });
 
-        [fullName, className, phoneNumber, robuxEmail, mlEmail, mlPassword].forEach(input => {
+        [fullName, className, phoneNumber, robuxEmail, mlEmail].forEach(input => {
             if (input) input.addEventListener('focus', () => statusMsg.classList.add('hidden'));
         });
     })();
